@@ -1,0 +1,15 @@
+{
+  "name": "拼闲转",
+  "short_name": "拼闲转",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#FF4400",
+  "theme_color": "#FF4400",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/3649/3649231.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

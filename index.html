@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>拼闲转 - 爆款搬运助手</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#FF4400">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+        body { font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
+        .gradient-bg { background: linear-gradient(135deg, #FF4400 0%, #FF8800 100%); }
+        .card { background: white; border-radius: 1.5rem; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1); }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen pb-10">
+    <!-- Header -->
+    <div class="gradient-bg pt-12 pb-20 px-6 text-white text-center">
+        <h1 class="text-3xl font-bold mb-2">拼闲转 🚀</h1>
+        <p class="opacity-90">拼多多爆款，一键变闲鱼闲置</p>
+    </div>
+
+    <!-- Main Content -->
+    <div class="px-5 -mt-12">
+        <!-- Step 1: Input -->
+        <div class="card p-6 mb-6">
+            <div class="flex items-center mb-4">
+                <span class="w-8 h-8 rounded-full gradient-bg flex items-center justify-center text-white font-bold mr-3">1</span>
+                <h2 class="text-xl font-semibold text-gray-800">粘贴拼多多链接</h2>
+            </div>
+            <textarea id="pdd-url" rows="3" class="w-full p-4 bg-gray-100 border-none rounded-xl focus:ring-2 focus:ring-orange-500 transition-all text-sm" placeholder="请在此粘贴商品链接..."></textarea>
+            <button onclick="parseUrl()" class="w-full mt-4 py-4 gradient-bg text-white font-bold rounded-xl shadow-lg active:scale-95 transition-transform">
+                立即解析商品
+            </button>
+        </div>
+
+        <!-- Step 2: AI Result (Hidden initially) -->
+        <div id="result-section" class="card p-6 mb-6 hidden">
+            <div class="flex items-center mb-4">
+                <span class="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold mr-3 text-center">2</span>
+                <h2 class="text-xl font-semibold text-gray-800">AI 文案实验室</h2>
+            </div>
+
+            <div class="flex space-x-2 mb-4 overflow-x-auto pb-2 scrollbar-hide">
+                <button onclick="changeStyle('student')" class="style-btn px-4 py-2 rounded-full bg-orange-100 text-orange-600 text-sm font-medium whitespace-nowrap active">学生党</button>
+                <button onclick="changeStyle('moving')" class="style-btn px-4 py-2 rounded-full bg-gray-100 text-gray-600 text-sm font-medium whitespace-nowrap">搬家出</button>
+                <button onclick="changeStyle('regret')" class="style-btn px-4 py-2 rounded-full bg-gray-100 text-gray-600 text-sm font-medium whitespace-nowrap">买错了</button>
+                <button onclick="changeStyle('gift')" class="style-btn px-4 py-2 rounded-full bg-gray-100 text-gray-600 text-sm font-medium whitespace-nowrap">抽奖中</button>
+            </div>
+
+            <div id="ai-content" class="p-4 bg-blue-50 rounded-xl text-gray-700 text-sm leading-relaxed mb-4 min-h-[100px]">
+                <!-- AI modified content goes here -->
+            </div>
+
+            <div class="grid grid-cols-2 gap-3">
+                <button onclick="copyContent()" class="py-3 bg-gray-800 text-white font-semibold rounded-xl active:scale-95 transition-transform flex items-center justify-center">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="Content-Copy"></path></svg>
+                    复制文案
+                </button>
+                <button onclick="openXianyu()" class="py-3 bg-yellow-400 text-yellow-900 font-semibold rounded-xl active:scale-95 transition-transform flex items-center justify-center">
+                    去闲鱼发布
+                </button>
+            </div>
+        </div>
+
+        <!-- Tips -->
+        <div class="text-center text-gray-400 text-xs mt-4">
+            <p>由于 PDD 限制，解析可能需要 1-2 秒</p>
+            <p class="mt-1">生成的文案越像“人话”卖得越快</p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js');
+            });
+        }
+    </script>
+</body>
+</html>
