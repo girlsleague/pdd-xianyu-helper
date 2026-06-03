@@ -30,9 +30,38 @@
                 <h2 class="text-xl font-semibold text-gray-800">粘贴拼多多链接</h2>
             </div>
             <textarea id="pdd-url" rows="3" class="w-full p-4 bg-gray-100 border-none rounded-xl focus:ring-2 focus:ring-orange-500 transition-all text-sm" placeholder="请在此粘贴商品链接..."></textarea>
+
+            <!-- Price Input -->
+            <div class="grid grid-cols-2 gap-4 mt-4">
+                <div>
+                    <label class="block text-xs text-gray-500 mb-1 ml-1">拼多多原价</label>
+                    <input type="number" id="original-price" class="w-full p-3 bg-gray-100 border-none rounded-xl text-sm" placeholder="¥ 0.00">
+                </div>
+                <div>
+                    <label class="block text-xs text-gray-500 mb-1 ml-1">建议转卖价</label>
+                    <input type="number" id="sell-price" class="w-full p-3 bg-gray-100 border-none rounded-xl text-sm" placeholder="¥ 0.00">
+                </div>
+            </div>
+
             <button onclick="parseUrl()" class="w-full mt-4 py-4 gradient-bg text-white font-bold rounded-xl shadow-lg active:scale-95 transition-transform">
-                立即解析商品
+                立即解析并生成文案
             </button>
+        </div>
+
+        <!-- Step 1.5: Image Guide -->
+        <div class="card p-6 mb-6">
+            <div class="flex items-center mb-4">
+                <span class="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center text-white font-bold mr-3">!</span>
+                <h2 class="text-xl font-semibold text-gray-800">图片处理指南</h2>
+            </div>
+            <div class="text-sm text-gray-600 bg-green-50 p-4 rounded-xl leading-relaxed">
+                <p class="mb-2">⚠️ 拼多多图片无法直接抓取，请按以下步骤操作：</p>
+                <ol class="list-decimal list-inside space-y-1">
+                    <li>回到拼多多 App <b>保存商品主图</b> 到相册。</li>
+                    <li>在闲鱼发布页点击“上传图片”选择它们。</li>
+                    <li>建议给图片加个滤镜，避免被系统识别。</li>
+                </ol>
+            </div>
         </div>
 
         <!-- Step 2: AI Result (Hidden initially) -->

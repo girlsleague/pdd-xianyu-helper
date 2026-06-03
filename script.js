@@ -38,6 +38,17 @@ function parseUrl() {
 
         // Mock a title extraction
         currentTitle = "拼多多高品质爆款好物";
+
+        // Mock price generation if empty
+        const originalPriceInput = document.getElementById('original-price');
+        const sellPriceInput = document.getElementById('sell-price');
+
+        if (!originalPriceInput.value) {
+            const randomPrice = (Math.random() * 100 + 50).toFixed(2);
+            originalPriceInput.value = randomPrice;
+            sellPriceInput.value = (randomPrice * 0.8).toFixed(2);
+        }
+
         updateAIContent();
 
         // Smooth scroll to result
@@ -61,7 +72,10 @@ function changeStyle(style) {
 
 function updateAIContent() {
     const template = TEMPLATES[currentStyle];
-    const content = `${template.prefix}\n\n【商品】${currentTitle}\n【状态】全新的，仅拆开拍了个照\n【理由】${template.suffix}`;
+    const originalPrice = document.getElementById('original-price').value || "0.00";
+    const sellPrice = document.getElementById('sell-price').value || "0.00";
+
+    const content = `${template.prefix}\n\n【商品】${currentTitle}\n【状态】全新的，仅拆开拍了个照\n【价格】拼多多原价¥${originalPrice}，现在¥${sellPrice}就出\n【理由】${template.suffix}`;
     document.getElementById('ai-content').innerText = content;
 }
 
