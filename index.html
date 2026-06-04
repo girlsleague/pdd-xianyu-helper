@@ -27,25 +27,72 @@
         <div class="card p-6 mb-6">
             <div class="flex items-center mb-4">
                 <span class="w-8 h-8 rounded-full gradient-bg flex items-center justify-center text-white font-bold mr-3">1</span>
-                <h2 class="text-xl font-semibold text-gray-800">粘贴拼多多链接</h2>
+                <h2 class="text-xl font-semibold text-gray-800">真实拼多多解析</h2>
             </div>
-            <textarea id="pdd-url" rows="3" class="w-full p-4 bg-gray-100 border-none rounded-xl focus:ring-2 focus:ring-orange-500 transition-all text-sm" placeholder="请在此粘贴商品链接..."></textarea>
+            <textarea id="pdd-url" rows="3" class="w-full p-4 bg-gray-100 border-none rounded-xl focus:ring-2 focus:ring-orange-500 transition-all text-sm" placeholder="请在此粘贴拼多多商品链接..."></textarea>
+
+            <div id="parse-status" class="hidden mt-4 text-sm rounded-xl px-4 py-3"></div>
 
             <!-- Price Input -->
             <div class="grid grid-cols-2 gap-4 mt-4">
                 <div>
-                    <label class="block text-xs text-gray-500 mb-1 ml-1">拼多多原价</label>
-                    <input type="number" id="original-price" class="w-full p-3 bg-gray-100 border-none rounded-xl text-sm" placeholder="¥ 0.00">
+                    <label class="block text-xs text-gray-500 mb-1 ml-1">拼多多进货价</label>
+                    <input type="number" id="original-price" class="w-full p-3 bg-gray-100 border-none rounded-xl text-sm" placeholder="¥ 0.00" oninput="updateAIContent()">
                 </div>
                 <div>
                     <label class="block text-xs text-gray-500 mb-1 ml-1">建议转卖价</label>
-                    <input type="number" id="sell-price" class="w-full p-3 bg-gray-100 border-none rounded-xl text-sm" placeholder="¥ 0.00">
+                    <input type="number" id="sell-price" class="w-full p-3 bg-gray-100 border-none rounded-xl text-sm" placeholder="¥ 0.00" oninput="updateAIContent()">
                 </div>
             </div>
 
-            <button onclick="parseUrl()" class="w-full mt-4 py-4 gradient-bg text-white font-bold rounded-xl shadow-lg active:scale-95 transition-transform">
-                立即解析并生成文案
+            <button id="parse-btn" onclick="parseUrl(event)" class="w-full mt-4 py-4 gradient-bg text-white font-bold rounded-xl shadow-lg active:scale-95 transition-transform">
+                立即解析真实商品
             </button>
+        </div>
+
+        <div id="product-card" class="card p-6 mb-6 hidden">
+            <div class="flex items-center mb-4">
+                <span class="w-8 h-8 rounded-full bg-purple-500 flex items-center justify-center text-white font-bold mr-3">2</span>
+                <h2 class="text-xl font-semibold text-gray-800">拼多多真实商品信息</h2>
+            </div>
+            <div class="flex gap-4">
+                <img id="product-image" class="w-24 h-24 rounded-2xl object-cover bg-gray-100" alt="商品主图">
+                <div class="flex-1 min-w-0">
+                    <p id="product-title" class="text-base font-semibold text-gray-800 leading-6"></p>
+                    <p id="product-store" class="text-sm text-gray-500 mt-2"></p>
+                    <div class="flex flex-wrap gap-2 mt-3 text-xs">
+                        <span id="product-price" class="px-3 py-1 rounded-full bg-orange-50 text-orange-600"></span>
+                        <span id="product-sales" class="px-3 py-1 rounded-full bg-blue-50 text-blue-600"></span>
+                        <span id="product-source" class="px-3 py-1 rounded-full bg-gray-100 text-gray-600"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="insights-card" class="card p-6 mb-6 hidden">
+            <div class="flex items-center mb-4">
+                <span class="w-8 h-8 rounded-full bg-indigo-500 flex items-center justify-center text-white font-bold mr-3">3</span>
+                <h2 class="text-xl font-semibold text-gray-800">闲鱼市场参考</h2>
+            </div>
+            <div class="grid grid-cols-2 gap-3 mb-4 text-sm">
+                <div class="bg-gray-50 rounded-2xl p-4">
+                    <p class="text-gray-500">闲鱼均价</p>
+                    <p id="insight-avg-price" class="text-xl font-semibold text-gray-800 mt-1">--</p>
+                </div>
+                <div class="bg-gray-50 rounded-2xl p-4">
+                    <p class="text-gray-500">价格区间</p>
+                    <p id="insight-price-range" class="text-xl font-semibold text-gray-800 mt-1">--</p>
+                </div>
+                <div class="bg-gray-50 rounded-2xl p-4">
+                    <p class="text-gray-500">需求热度</p>
+                    <p id="insight-demand" class="text-xl font-semibold text-gray-800 mt-1">--</p>
+                </div>
+                <div class="bg-gray-50 rounded-2xl p-4">
+                    <p class="text-gray-500">样本数量</p>
+                    <p id="insight-sample-size" class="text-xl font-semibold text-gray-800 mt-1">--</p>
+                </div>
+            </div>
+            <p id="insight-summary" class="text-sm text-gray-600 leading-6"></p>
         </div>
 
         <!-- Step 1.5: Image Guide -->
@@ -64,18 +111,18 @@
             </div>
         </div>
 
-        <!-- Step 2: AI Result (Hidden initially) -->
+        <!-- Step 4: AI Result (Hidden initially) -->
         <div id="result-section" class="card p-6 mb-6 hidden">
             <div class="flex items-center mb-4">
-                <span class="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold mr-3 text-center">2</span>
+                <span class="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold mr-3 text-center">4</span>
                 <h2 class="text-xl font-semibold text-gray-800">AI 文案实验室</h2>
             </div>
 
             <div class="flex space-x-2 mb-4 overflow-x-auto pb-2 scrollbar-hide">
-                <button onclick="changeStyle('student')" class="style-btn px-4 py-2 rounded-full bg-orange-100 text-orange-600 text-sm font-medium whitespace-nowrap active">学生党</button>
-                <button onclick="changeStyle('moving')" class="style-btn px-4 py-2 rounded-full bg-gray-100 text-gray-600 text-sm font-medium whitespace-nowrap">搬家出</button>
-                <button onclick="changeStyle('regret')" class="style-btn px-4 py-2 rounded-full bg-gray-100 text-gray-600 text-sm font-medium whitespace-nowrap">买错了</button>
-                <button onclick="changeStyle('gift')" class="style-btn px-4 py-2 rounded-full bg-gray-100 text-gray-600 text-sm font-medium whitespace-nowrap">抽奖中</button>
+                <button onclick="changeStyle('student', event)" class="style-btn px-4 py-2 rounded-full bg-orange-100 text-orange-600 text-sm font-medium whitespace-nowrap active">学生党</button>
+                <button onclick="changeStyle('moving', event)" class="style-btn px-4 py-2 rounded-full bg-gray-100 text-gray-600 text-sm font-medium whitespace-nowrap">搬家出</button>
+                <button onclick="changeStyle('regret', event)" class="style-btn px-4 py-2 rounded-full bg-gray-100 text-gray-600 text-sm font-medium whitespace-nowrap">买错了</button>
+                <button onclick="changeStyle('gift', event)" class="style-btn px-4 py-2 rounded-full bg-gray-100 text-gray-600 text-sm font-medium whitespace-nowrap">抽奖中</button>
             </div>
 
             <div id="ai-content" class="p-4 bg-blue-50 rounded-xl text-gray-700 text-sm leading-relaxed mb-4 min-h-[100px]">
@@ -95,8 +142,8 @@
 
         <!-- Tips -->
         <div class="text-center text-gray-400 text-xs mt-4">
-            <p>由于 PDD 限制，解析可能需要 1-2 秒</p>
-            <p class="mt-1">生成的文案越像“人话”卖得越快</p>
+            <p>真实解析依赖目标页面可访问性与平台限制，失败时可补充开放平台凭据</p>
+            <p class="mt-1">先看闲鱼价格带，再决定是否上架，通常更容易出单</p>
         </div>
     </div>
 
